@@ -1,4 +1,5 @@
-﻿using System;
+﻿using pfl.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -9,16 +10,17 @@ namespace pfl.Controllers
 {
     public class ProductController : Controller
     {
-        // GET: /<controller>/
+
+        // /Product/
+        // Page will use a GET request to the PFL test API to display all of the 
+        // Products and the details of each one 
         public ActionResult Index()
         {
-            return View();
-        }
 
-        // GET: /pflApp/Products/
-        public string ProductList()
-        {
-            return "Bleh";
+            Requester req = new Requester();
+            List<ProductsJSON> products = req.GetAllProducts();
+            ViewData["ProductList"] = products;
+            return View();
         }
     }
 }

@@ -2,6 +2,14 @@
 @{
     ViewBag.Title = "Products";
 }
-
+<!--Will display Products returned from the API-->
 <h2>Product List</h2>
 
+<div>
+    @{var productList = ViewData["ProductList"]; }
+
+    <div>
+        @{productList[0].id.get() ; }
+    </div>
+
+</div>
