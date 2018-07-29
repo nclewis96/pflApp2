@@ -6,10 +6,10 @@
 <h2>Product List</h2>
 
 <div>
-    @{var productList = ViewData["ProductList"]; }
+    @{List<ProductsJSON> productList = ViewData["ProductList"]; }
 
-    <div>
+    <p>
         @{productList[0].id.get() ; }
-    </div>
+    </p>
 
 </div>
