@@ -18,103 +18,103 @@ namespace pfl.Models
         public class Results
         {
             [JsonProperty("data")]
-            public List<ProductsJSON> productList { get; set; }
+            public List<ProductsJSON> ProductList { get; set; }
         }
 
         //Stores each individual product and it's prices 
         public class ProductsJSON
         {
             [JsonProperty("id")]
-            public int id { get; set; }
+            public int Id { get; set; }
 
             [JsonProperty("productID")]
-            public int productID { get; set; }
+            public int ProductID { get; set; }
 
             [JsonProperty("sku")]
-            public string sku { get; set; }
+            public string Sku { get; set; }
 
             [JsonProperty("name")]
-            public string name { get; set; }
+            public string Name { get; set; }
 
             [JsonProperty("description")]
-            public string description { get; set; }
+            public string Description { get; set; }
 
             [JsonProperty("imageURL")]
-            public string imageURL { get; set; }
+            public string ImageURL { get; set; }
 
             [JsonProperty("hasTemplate")]
-            public bool hasTemplate { get; set; }
+            public bool HasTemplate { get; set; }
 
             [JsonProperty("quantityDefault")]
-            public int quantityDefault { get; set; }
+            public int QuantityDefault { get; set; }
 
             [JsonProperty("quantityIncrement")]
-            public int quantityIncrement { get; set; }
+            public int? QuantityIncrement { get; set; }
 
             [JsonProperty("quantityMaximum")]
-            public int quantityMaximum { get; set; }
+            public int? QuantityMaximum { get; set; }
 
             [JsonProperty("quantityMinimum")]
-            public int quantityMinimum { get; set; }
+            public int? QuantityMinimum { get; set; }
 
             [JsonProperty("shippingMethodDefault")]
-            public string shippingMethodDefault { get; set; }
+            public string ShippingMethodDefault { get; set; }
 
             [JsonProperty("emailTemplateId")]
-            public string emailTemplateId { get; set; }
+            public string EmailTemplateId { get; set; }
 
             [JsonProperty("lastUpdated")]
-            public string lastUpdated { get; set; }
+            public string LastUpdated { get; set; }
 
             [JsonProperty("deliveredPrices")]
             public List<ProductPrice> Prices { get; set; }
 
             [JsonProperty("productionSpeeds")]
-            public ProductSpeed prodSpeed { get; set; }
+            public List<ProductSpeed> ProdSpeeds { get; set; }
 
             [JsonProperty("productFormat")]
-            public string prodFormat { get; set; }
+            public string ProdFormat { get; set; }
 
             [JsonProperty("productRestrictionType")]
-            public string restrictType { get; set; }
+            public string RestrictType { get; set; }
         }
 
         //JSON object that will store the deliveredPrices from the GET request for each product
         public class ProductPrice
         {
             [JsonProperty("deliveryMethodCode")]
-            public string deliveryMethodCode { get; set; }
+            public string DeliveryMethodCode { get; set; }
 
             [JsonProperty("description")]
-            public string description { get; set; }
+            public string Description { get; set; }
 
             [JsonProperty("isDefault")]
-            public bool isDefault { get; set; }
+            public bool IsDefault { get; set; }
 
             [JsonProperty("locationType")]
-            public string locationType { get; set; }
+            public string LocationType { get; set; }
 
             [JsonProperty("price")]
-            public float price { get; set; }
+            public float Price { get; set; }
 
             [JsonProperty("country")]
-            public string country { get; set; }
+            public string Country { get; set; }
 
             [JsonProperty("countryCode")]
-            public int countryCode { get; set; }
+            public string CountryCode { get; set; }
 
             [JsonProperty("created")]
-            public string created { get; set; }
+            public string Created { get; set; }
         }
 
         //JSON object that stores how long a product will take to be produced
         public class ProductSpeed
         {
         [JsonProperty("days")]
-        public int days { get; set; }
+        public int Days { get; set; }
 
         [JsonProperty("isDefault")]
-        public bool isDefault { get; set; }
+        public bool IsDefault { get; set; }
         }
 
 

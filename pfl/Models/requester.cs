@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Script.Serialization;
-using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace pfl.Models
 {
@@ -16,82 +14,76 @@ namespace pfl.Models
         //Log in information for the API
         private static string username = "miniproject";
         private static string password = "Pr!nt123";
+        private static string uri = "https://testapi.pfl.com";
+        private static HttpClient client = new HttpClient();
         //List of products returned by the GET request
         private static List<ProductsJSON> prodList;
 
         //Default Constructor that will use the projects default url/user/pass
-        public Requester() { }
-
-        //Alternate constructor that will allow a new/different url/user/pass
-        public Requester(string newUser, string newPass)
+        public Requester()
         {
-            username = newUser;
-            password = newPass;
+            //Sets up Request, including Auth Header
+            client.BaseAddress = new Uri(uri);
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            string auth = username + ":" + password;
+            //Converts the Authorization to base64, and attatches
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
+                System.Convert.ToBase64String(
+                    System.Text.ASCIIEncoding.ASCII.GetBytes(auth)));
+        }
+
+        //Alternate constructor that will allow a new/different uri/user/pass
+        public Requester(string newUser, string newPass, string uri)
+        {
+            //Sets up Request, including Auth Header
+            client.BaseAddress = new Uri(uri);
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            string auth = newUser + ":" + newPass;
+            //Converts the Authorization to base64, and attatches
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
+                System.Convert.ToBase64String(
+                    System.Text.ASCIIEncoding.ASCII.GetBytes(auth)));
         }
             
 
         //Calls a GET HTTP request on the /products/ endpoint, and returns all 
         //of the products gathered through the GET
-        public List<ProductsJSON> GetAllProducts()
+        public static async Task<RootObj> GetAllProducts()
         {
-            
-            GetRequest(@"https://testapi.pfl.com/products?apikey=136085");
-            return prodList;
+            return await GetRequest("/products?apikey=136085");
         }
 
-        public List<ProductsJSON> GetSingleProduct(int id)
+        public static async Task<RootObj> GetSingleProduct(int id)
         {
-            GetRequest(@"https://testapi.pfl.com/products/" + id + "?apikey=136085");
-            return prodList;
+            return await GetRequest("/products/" + id + "?apikey=136085");
         }
 
         //Handles the HTTP GET request
-        public static void GetRequest(string url)
+        private static async Task<RootObj> GetRequest(string path)
         {
-            //Sets up Request, including Auth Header
-            string authInfo = username + ":" + password;
-            authInfo = Convert.ToBase64String(System.Text.Encoding.Default.GetBytes(authInfo));
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.Headers["Authorization"] = "Basic" + authInfo;
-            try
+            RootObj products = null;
+            HttpResponseMessage response = await client.GetAsync(path);
+            if (response.IsSuccessStatusCode)
             {
-                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-                {
-                    using (var resStream = new StreamReader(response.GetResponseStream()))
-                    {
-                        JavaScriptSerializer js = new JavaScriptSerializer();
-                        var objText = resStream.ReadToEnd();
-                        RootObj obj = (RootObj)js.Deserialize(objText, typeof(RootObj));
-                        foreach (ProductsJSON pj in obj.Results.productList)
-                        {
-                            prodList.Add(pj);
-                        }//Ends the For Each, all of the JSON objects should be added to the Prod List
-                    }//dispose of resStream
-                }//dispose of response
+                products = await response.Content.ReadAsAsync<RootObj>();
             }
-            catch (Exception ex)
-            {
-               Console.WriteLine(ex);
-            }
+            return products;
         }//end getRequest
 
-        
+
 
         //Handles the HTTP POST request
-        async static void PostRequest()
+        //TODO: Change return to Order Number in Response
+        static async Task<HttpStatusCode> PostRequest(OrderJSON order)
         {
+            //Sends a Post to the order endpoint in the PFL API
 
-            using (HttpClient client = new HttpClient())
-            {
-                using (HttpResponseMessage response = await client.GetAsync(@"https://testapi.pfl.com/products?apikey=136085"))
-                {
-                    using (HttpContent content = response.Content)
-                    {
+            HttpResponseMessage response =
+                await client.PostAsJsonAsync($"/orders?apikey=136085", order);
+            return response.StatusCode;
 
-
-                    }//content is disposed
-                }//response is disposed
-            }//client is disposed   
         }//end postRequest
     }
 }
