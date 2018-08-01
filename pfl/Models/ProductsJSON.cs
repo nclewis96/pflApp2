@@ -28,7 +28,7 @@ namespace pfl.Models
             public int Id { get; set; }
 
             [JsonProperty("productID")]
-            public int ProductID { get; set; }
+            public int ProductId { get; set; }
 
             [JsonProperty("sku")]
             public string Sku { get; set; }

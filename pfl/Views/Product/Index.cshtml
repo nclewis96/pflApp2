@@ -10,18 +10,92 @@
 <div>
     @try
     {
+    <form>
+        
+            <!--Takes each individual item in the list and
+        runs through the view set up for each, making each a new entry in the unordered list -->
+            @foreach (ProductsJSON item in (List<ProductsJSON>)ViewData["ProductList"])
+            {
+                
+                    <input type="checkbox" name="product" value="@item.Id"  />
+                    <img src="@item.ImageURL" />
+                    <h3>@item.Name</h3>
+                    <p>Product ID : @item.ProductId;</p>
+                    <p>@item.Description</p>
+                    <p>Product Format : @item.ProdFormat</p>
+                    <p>Product Restriction : @item.RestrictType</p>
+                    <p>Default Quantity : @item.QuantityDefault</p>
+                    <!--Checks to see if the increment value is null, assigns 1 if it is then displays it-->
+                    if (item.QuantityIncrement == null)
+                    {
+                        <p>Order size increments by : 1</p>
+                    }
+                    else
+                    {
+                        <p>Order size increments by : @item.QuantityIncrement</p>
+                    }
 
 
-        foreach (ProductsJSON item in (List<ProductsJSON>)ViewData["ProductList"])
-        {
+                    <!--Checks to see if the Maximum value is null, Says there is no max if it is, displays max otherwise-->
+                    if (item.QuantityMaximum == null)
+                    {
+                        <p>No maximum order quantity.</p>
+                    }
+                    else
+                    {
+                        <p>Maximum order size : @item.QuantityMaximum</p>
+                    }
 
-        <p>
-            @item.Id;
-        </p>
-        }
-    }catch(Exception e)
+                    if (item.QuantityMinimum == null)
+                    {
+                        <p>No minimum order quantity.</p>
+                    }
+                    else
+                    {
+                        <p>Minimum order size : @item.QuantityMinimum</p>
+                    }
+
+
+                    <!--Displays all price models for the product-->
+                    <h4>Product Prices</h4>
+                    
+                        foreach (ProductPrice price in item.Prices)
+                        {
+                           
+                                <input type="radio" name="price" value="@price.Price" />
+                                <p>Delivery Method Code : @price.DeliveryMethodCode</p>
+                                <p>Description : @price.Description</p>
+                                <p>Default : @price.IsDefault</p>
+                                <p>Location Type : @price.LocationType</p>
+                                <p>Country : @price.Country</p>
+                                <p>Price : $@price.Price</p>
+                            
+                        }
+                    
+                    <!--Displays all Production speeds for the product-->
+                    <h4>Production Speeds</h4>
+                    
+                        foreach (ProductSpeed speed in item.ProdSpeeds)
+                        {
+                            
+                        
+                            <input type="radio" name="speed" value="@speed.Days" />
+                            <p>Days to produce : @speed.Days</p>
+                            <p>Default : @speed.IsDefault</p>
+                        
+                        }
+                    
+
+                
+            }
+        
+        <!--This currently does NOTHING-->
+        <input type="submit" value="Proceed to Order" />
+    </form>
+    }
+    catch (Exception e)
     {
         Console.WriteLine(e);
     }
 
-    </div>
+</div>

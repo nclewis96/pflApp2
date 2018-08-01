@@ -12,7 +12,7 @@ namespace pfl.Controllers
     {
         // /Order/
         // Page will provide Fields to allow the user to input information to 
-        // Complete an order
+        // Complete an order. Currently just a display.
         public ActionResult Index()
         {
 
